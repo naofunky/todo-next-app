@@ -61,6 +61,31 @@ export const Todo = ({ todo }: Props) => {
       console.error(error);
     }
   };
+
+  // checkbox toggle Todo Completed
+  const toggleTaskCompleted = async (id: number, isCompleted: boolean) => {
+    try {
+      const res = await fetch(`${API_URL}/edit/${todo.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isCompleted: !isCompleted,
+        }),
+      });
+
+      if (res.ok) {
+        const newtodo = await res.json();
+        const newTodos = todos.map((todo: TodoType) =>
+          todo.id === newtodo.id ? newtodo : todo
+        );
+        mutate(newTodos);
+      }
+    } catch (error) {
+      alert(error);
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <li className="py-4">
@@ -72,6 +97,7 @@ export const Todo = ({ todo }: Props) => {
               type="checkbox"
               className="h-4 w-4 text-teal-600 focus:ring-teal-500
             border-gray-300 rounded"
+              onClick={() => toggleTaskCompleted(todo.id, todo.isCompleted)}
             />
             <label className="ml-3 block text-gray-900">
               {isEditing ? (
@@ -83,8 +109,9 @@ export const Todo = ({ todo }: Props) => {
                 />
               ) : (
                 <span
-                  className={`text-lg font-medium mr-2 
-                    line-through text-gray-500`}
+                  className={`text-lg font-medium mr-2 text-gray-500 ${
+                    todo.isCompleted ? 'line-through' : ''
+                  }`}
                 >
                   {todo.title}
                 </span>
