@@ -1,11 +1,11 @@
 import useSWR from 'swr';
 import { API_URL } from '../utils/url';
 
-export const useGetTodo = () => {
-  function fetcher(url: string) {
-    return fetch(url).then((res) => res.json());
-  }
+async function fetcher(url: string) {
+  return fetch(url).then((res) => res.json());
+}
 
+export const useGetTodo = () => {
   const { data, isLoading, error, mutate } = useSWR(`${API_URL}`, fetcher);
 
   return {
