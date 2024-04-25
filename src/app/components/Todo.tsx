@@ -110,7 +110,7 @@ export const Todo = ({ todo }: Props) => {
               ) : (
                 <span
                   className={`text-lg font-medium mr-2 text-gray-500 ${
-                    todo.isCompleted ? 'line-through' : ''
+                    todo.isCompleted === false ? 'line-through' : ''
                   }`}
                 >
                   {todo.title}
